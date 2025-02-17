@@ -8,11 +8,14 @@ int cookieW = 400;
 int cookieH = 400;
 boolean stopClick = false;
 float offsetX, offsetY;
+float[] cCoor = {0, 0};
+float sca = cookieW++;
+
 PImage cookie;
 PImage bg;
 PFont font;
 
-void drawUiElems(){
+void drawUi(){
   noStroke();
   fill(84, 84, 84, 100);
   rect(-177, 1, 720, 800);
@@ -21,19 +24,35 @@ void drawUiElems(){
 }
 
 void drawCount(){
+  int[] tCoor = {width/2 + 500, height/5};
   noStroke();
   textFont(font);
   fill(135, 80, 35);
   rect(1010, height/11, 500, 88);
   fill(255);
-  text(clickCount, width/2 + 500, height/5);
+  
+  println(tCoor[0]);
+  text(clickCount, tCoor[0], tCoor[1]);
+  
+  if (clickCount >= 10) {
+    tCoor[0] += 30;
+    println(tCoor[0]);
+  }
+  
+  if (clickCount == 100) {
+    tCoor[0] += 30 * 6;
+  }
 }
 
 void drawCookie(){
+  /*if (stopClick) {
+    scale(sca);
+    println(sca);
+  }*/
   tint(84, 84, 84, 100);
-  image(cookie, cookieX + 15, cookieY);
+  image(cookie, cCoor[0] + 15, cCoor[1]);
   noTint();
-  image(cookie, cookieX, cookieY);
+  image(cookie, cCoor[0], cCoor[1]);
   cookie.resize(cookieW, cookieH);
 }
 
@@ -46,18 +65,19 @@ void setup(){
 
 void draw(){
   background(bg);
-  drawUiElems();
-  drawCount();
+  drawUi();
   drawCookie();
+  drawCount();
+  
 }
 
 void mousePressed(){
-  if (mouseX > cookieX && mouseX < cookieX + cookieW && mouseY > cookieY && mouseY < cookieY + cookieH) {
+  if (mouseX > cCoor[0] && mouseX < cCoor[0] + cookieW && mouseY > cCoor[1] && mouseY < cCoor[1] + cookieH) {
     stopClick = true;
     offsetX = mouseX - cookieX;
     offsetY = mouseY - cookieY;
-    cookieX = random(width - cookieW);
-    cookieY = random(height - cookieH);
+    cCoor[0] = random(width - cookieW);
+    cCoor[1] = random(height - cookieH);
     clickCount++;
   }
 }
